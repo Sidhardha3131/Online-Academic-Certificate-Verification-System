@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate Verification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    #verificationForm {
+      text-align: center;
+      margin: 20px;
+    }
+
+    #fileInput {
+      margin-bottom: 10px;
+    }
+
+    #verificationResult {
+      text-align: center;
+      margin: 20px;
+      padding: 10px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #extractedText {
+      width: 100%;
+      height: 200px;
+      margin-top: 10px;
+      resize: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Certificate Verification</h1>
+
+  <form id="verificationForm">
+    <input type="file" id="fileInput" accept=".pdf, .png, .jpg, .jpeg" />
+    <button type="button" onclick="verifyCertificate()">Verify Certificate</button>
+  </form>
+
+  <div id="verificationResult">
+    <p>Extracted Text:</p>
+    <textarea id="extractedText" readonly></textarea>
+    <p>Verification Result:</p>
+    <p id="verificationStatus"></p>
+  </div>
+
+  <script>
+    async function verifyCertificate() {
+      const fileInput = document.getElementById('fileInput');
+      const extractedText = document.getElementById('extractedText');
+      const verificationStatus = document.getElementById('verificationStatus');
+
+      const file = fileInput.files[0];
+      if (!file) {
+        verificationStatus.textContent = 'Please select a file.';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('http://localhost:3000/verifyCertificate', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        // Display the extracted text and verification result
+        extractedText.value = data.text;
+        verificationStatus.textContent = `Verification Result: ${data.verificationResult}`;
+      } catch (error) {
+        console.error('Certificate verification error:', error);
+        verificationStatus.textContent = 'Certificate verification failed. Please try again.';
+      }
+    }
+  </script>
+</body>
+</html>
