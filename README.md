@@ -23,7 +23,7 @@ This project is an Online Academic Certificate Verification System that allows u
 ## Setup and Installation
 
 1. Clone the repository:
-   git clone https://github.com/your-username/your-repository.git
+   git clone https://github.com/Sidhardha3131/Online-Academic-Certificate-Verification-System
    
 Install dependencies:
 cd your-repository
